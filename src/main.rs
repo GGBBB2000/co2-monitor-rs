@@ -1,4 +1,3 @@
-extern crate hidapi;
 mod co2_monitor;
 use co2_monitor::Co2Monitor;
 

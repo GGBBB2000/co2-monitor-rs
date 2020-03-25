@@ -1,4 +1,3 @@
-extern crate hidapi;
 use hidapi::HidApi;
 
 pub struct Co2Monitor {
