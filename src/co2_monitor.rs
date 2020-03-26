@@ -5,12 +5,18 @@ pub struct Co2Monitor {
 }
 
 impl Co2Monitor {
+    /// - Feature Report用の値
     const KEY: [u8; 8] = [0x86, 0x41, 0xc9, 0xa8, 0x7f, 0x41, 0x3c, 0xac];
+    /// - Decrypt用の定数
     const OFFSET: [u32; 8] = [0x48, 0x74, 0x65, 0x6D, 0x70, 0x39, 0x39, 0x65]; // "Htemp99e"
+    /// - Decrypt用の定数
     const SHUFFLE: [u32; 8] = [2, 4, 0, 7, 1, 6, 5, 3];
+    /// - Vendor Id 
     const VID: u16 = 0x04D9;
+    /// - Product Id 
     const PID: u16 = 0xA052;
 
+    /// - sudo権限が必要
     pub fn new() -> Self {
         let api = HidApi::new().unwrap();
         Co2Monitor {
@@ -18,6 +24,7 @@ impl Co2Monitor {
         }
     }
 
+    /// - CO2-miniにfeature reportを送る
     pub fn init(&mut self) {
         self.device.send_feature_report(&Self::KEY).unwrap();
     }
