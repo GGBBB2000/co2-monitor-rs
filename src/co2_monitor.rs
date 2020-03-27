@@ -4,6 +4,11 @@ pub struct Co2Monitor {
     device: hidapi::HidDevice,
 }
 
+pub struct Data {
+    pub co2: u16,
+    pub temp: f32
+}
+
 impl Co2Monitor {
     /// - Feature Report用の値
     const KEY: [u8; 8] = [0x86, 0x41, 0xc9, 0xa8, 0x7f, 0x41, 0x3c, 0xac];
@@ -29,7 +34,7 @@ impl Co2Monitor {
         self.device.send_feature_report(&Self::KEY).unwrap();
     }
 
-    pub fn read(&self) -> Result<(u16, f32), hidapi::HidError> {
+    pub fn read(&self) -> Result<Data, hidapi::HidError> {
         let mut buf = [0u8; 8];
         let mut co2_checked = false;
         let mut temp_checked = false;
@@ -52,7 +57,11 @@ impl Co2Monitor {
                 _ => (),
             }
         }
-        Ok((co2_val, temp_val))
+        let data = Data {
+            co2: co2_val,
+            temp: temp_val
+        };
+        Ok(data)
     }
 
     fn decrypt(buf: [u8; 8]) -> Vec<u8> {
